@@ -7,9 +7,9 @@
 &nbsp;              ✅ build out bus <br>
 &nbsp;              ✅ build out fake RAM <br>
 &nbsp;              ⬜ build out PPU <br>
-&nbsp;&nbsp;&nbsp;    ⬜ Work on logic <br>
-&nbsp;&nbsp;&nbsp;    ⬜ Work on rendering <br>
-&nbsp;&nbsp;&nbsp;    ⬜ Work on vertical scrolling <br>
-&nbsp;&nbsp;&nbsp;    ⬜ Work on horizontal scrolling <br>
+&nbsp;&nbsp;&nbsp;    ⬜ work on logic <br>
+&nbsp;&nbsp;&nbsp;    ⬜ work on rendering <br>
+&nbsp;&nbsp;&nbsp;    ⬜ work on vertical scrolling <br>
+&nbsp;&nbsp;&nbsp;    ⬜ work on horizontal scrolling <br>
 &nbsp;              ⬜ work on game input <br>
 &nbsp;              ⬜ build out APU <br>
