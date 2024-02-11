@@ -3,13 +3,13 @@
 ![](https://github.com/DapperBanana/NEMU/blob/master/NEMU%20Progress.png)
 
 ### Current to-do list
-- [x] build out CPU
-- [x] build out bus
-- [x] build out fake RAM
-- [ ] build out PPU
-  - [ ] Work on logic
-  - [ ] Work on Rendering
-  - [ ] Work on vertical scrolling
-  - [ ] Work on horizontal scrolling
-- [ ] work on game input
-- [ ] build out APU
+&nbsp;              ✅ build out CPU <br>
+&nbsp;              ✅ build out bus <br>
+&nbsp;              ✅ build out fake RAM <br>
+&nbsp;              ⬜ build out PPU <br>
+&nbsp;&nbsp;&nbsp;    ⬜ Work on logic <br>
+&nbsp;&nbsp;&nbsp;    ⬜ Work on Rendering <br>
+&nbsp;&nbsp;&nbsp;    ⬜ Work on vertical scrolling <br>
+&nbsp;&nbsp;&nbsp;    ⬜ Work on horizontal scrolling <br>
+&nbsp;              ⬜ work on game input <br>
+&nbsp;              ⬜ build out APU <br>
