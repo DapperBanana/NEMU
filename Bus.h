@@ -21,6 +21,9 @@ public:
 	void write(uint16_t addr, uint8_t data);
 	uint8_t read(uint16_t addr, bool bReadOnly = false);
 
+	void clock();
+	void reset();
+
 private:
 	uint32_t nSystemClockCounter = 0;
 };

@@ -34,3 +34,23 @@ uint8_t Bus::read(uint16_t addr, bool bReadOnly) {
 
 	return data;
 }
+
+void Bus::clock() {
+	// PPU runs 3x faster than CPU
+	ppu.clock();
+
+	if (nSystemClockCounter % 3 == 0) {
+		cpu.clock();
+	}
+
+	if (ppu.bFrameComplete) {
+		ppu.bFrameComplete = false;
+	}
+
+	nSystemClockCounter++;
+}
+
+void Bus::reset() {
+	cpu.reset();
+	nSystemClockCounter = 0;
+}
