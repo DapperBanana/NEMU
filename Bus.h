@@ -1,25 +1,26 @@
 #pragma once
+
 #include <cstdint>
-#include "olc6502.h"
 #include <array>
 
-class Bus{
-	
-	public:
-		Bus();
-		~Bus();
+#include "olc6502.h"
+#include "PPU.h"
 
-	//devices on the bus
-	public:
-		olc6502 cpu;
+class Bus {
+public:
+	Bus();
+	~Bus();
 
-		//fake RAM using the stack
-		std::array<uint8_t, 64 * 1024> ram;
+public:
+	olc6502 cpu;
+	PPU ppu;
 
-	//bus read/write
-	public:
-		void write(uint16_t addr, uint8_t data);
-		uint8_t read(uint16_t addr, bool bReadOnly = false);
+	std::array<uint8_t, 2048> cpuRam;
 
+public:
+	void write(uint16_t addr, uint8_t data);
+	uint8_t read(uint16_t addr, bool bReadOnly = false);
+
+private:
+	uint32_t nSystemClockCounter = 0;
 };
-
