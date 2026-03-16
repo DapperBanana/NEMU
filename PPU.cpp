@@ -25,7 +25,6 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		break;
 	case 0x0002: // Status
 		data = (status & 0xE0) | (dataBuffer & 0x1F);
-		// clear vertical blank flag on read
 		status &= ~0x80;
 		bAddressLatch = false;
 		break;
@@ -41,7 +40,6 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		data = dataBuffer;
 		dataBuffer = ppuRead(vramAddr);
 
-		// palette reads are not delayed
 		if (vramAddr >= 0x3F00)
 			data = dataBuffer;
 
@@ -129,6 +127,19 @@ void PPU::ppuWrite(uint16_t addr, uint8_t data) {
 }
 
 void PPU::clock() {
+	// set vblank flag at scanline 241, cycle 1
+	if (scanline == 241 && cycle == 1) {
+		status |= 0x80;
+		if (control & 0x80) {
+			bNmi = true;
+		}
+	}
+
+	// pre-render scanline clears vblank
+	if (scanline == -1 && cycle == 1) {
+		status &= ~0x80;
+	}
+
 	cycle++;
 	if (cycle >= 341) {
 		cycle = 0;
