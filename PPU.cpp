@@ -7,7 +7,7 @@ PPU::PPU() {
 
 	for (auto& pt : patternTable)
 		for (auto& b : pt) b = 0x00;
-
+	
 	for (auto& b : paletteTable) b = 0x00;
 }
 
@@ -39,6 +39,8 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		break;
 	case 0x0007: // Data
 		data = dataBuffer;
+		dataBuffer = nameTable[((ppuAddress & 0x0C00) >> 10)][ppuAddress & 0x03FF];
+		ppuAddress += (control & 0x04) ? 32 : 1;
 		break;
 	}
 
