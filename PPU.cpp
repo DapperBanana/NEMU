@@ -82,7 +82,7 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 		break;
 	case 0x0007: // Data
 		nameTable[((ppuAddress & 0x0C00) >> 10)][ppuAddress & 0x03FF] = data;
-		ppuAddress++; // TODO: Implement address increment based on control register
+		ppuAddress += (control & 0x04) ? 32 : 1;
 		break;
 	}
 }
