@@ -9,6 +9,8 @@ PPU::PPU() {
 		for (auto& b : pt) b = 0x00;
 	
 	for (auto& b : paletteTable) b = 0x00;
+
+	for (auto& b : oamMemory) b = 0x00;
 }
 
 PPU::~PPU() {
@@ -31,16 +33,14 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 	case 0x0003: // OAM Address
 		break;
 	case 0x0004: // OAM Data
+		data = oamMemory[oamAddress];
 		break;
 	case 0x0005: // Scroll
-		bAddressLatch = false;
 		break;
-	case 0x0006: // Address
+	case 0x0006: // PPU Address
 		break;
-	case 0x0007: // Data
+	case 0x0007: // PPU Data
 		data = dataBuffer;
-		dataBuffer = nameTable[((ppuAddress & 0x0C00) >> 10)][ppuAddress & 0x03FF];
-		ppuAddress += (control & 0x04) ? 32 : 1;
 		break;
 	}
 
@@ -51,6 +51,7 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 	switch (addr) {
 	case 0x0000: // Control
 		control = data;
+		tIncrement = (data & 0x04) ? 32 : 1; // Set VRAM address increment
 		break;
 	case 0x0001: // Mask
 		mask = data;
@@ -58,38 +59,52 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 	case 0x0002: // Status
 		break;
 	case 0x0003: // OAM Address
-		oamAddr = data;
+		oamAddress = data;
 		break;
 	case 0x0004: // OAM Data
-		oamData[oamAddr] = data;
+		oamMemory[oamAddress] = data;
 		break;
 	case 0x0005: // Scroll
-		if (bAddressLatch == 0) {
-			fineX = data & 0x07;
-			scrollX = data;
-			bAddressLatch = 1;
-		} else {
-			scrollY = data;
-			bAddressLatch = 0;
-		}
 		break;
-	case 0x0006: // Address
-		if (bAddressLatch == 0) {
-			ppuAddress = (data & 0x3F) << 8; // Only allow access to 14 bits
-			bAddressLatch = 1;
-		} else {
-			ppuAddress |= data;
-			bAddressLatch = 0;
-		}
+	case 0x0006: // PPU Address
+		addressLatch = (addressLatch << 8) | data;
+		address = addressLatch;
 		break;
-	case 0x0007: // Data
-		nameTable[((ppuAddress & 0x0C00) >> 10)][ppuAddress & 0x03FF] = data;
-		ppuAddress += (control & 0x04) ? 32 : 1;
+	case 0x0007: // PPU Data
+		vramWrite(address, data);
+		address += tIncrement;
 		break;
 	}
 }
 
-void PPU::clock() {
+void PPU::vramWrite(uint16_t addr, uint8_t data) {
+	addr &= 0x3FFF; // Mirroring
 
+	if (addr >= 0x0000 && addr <= 0x1FFF) {
+		patternTable[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+	}
+	else if (addr >= 0x2000 && addr <= 0x3EFF) {
+		nameTable[(addr & 0x0C00) >> 10][addr & 0x03FF] = data;
+	}
+	else if (addr >= 0x3F00 && addr <= 0x3FFF) {
+		paletteTable[addr & 0x001F] = data;
+	}
+}
 
+uint8_t PPU::vramRead(uint16_t addr) {
+	addr &= 0x3FFF;
+
+uint8_t data = 0x00;
+
+	if (addr >= 0x0000 && addr <= 0x1FFF) {
+		data = patternTable[(addr & 0x1000) >> 12][addr & 0x0FFF];
+	}
+	else if (addr >= 0x2000 && addr <= 0x3EFF) {
+		data = nameTable[(addr & 0x0C00) >> 10][addr & 0x03FF];
+	}
+	else if (addr >= 0x3F00 && addr <= 0x3FFF) {
+		data = paletteTable[addr & 0x001F];
+	}
+
+	return data;
 }
