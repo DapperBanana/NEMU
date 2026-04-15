@@ -41,6 +41,8 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		break;
 	case 0x0007: // PPU Data
 		data = dataBuffer;
+		dataBuffer = vramRead(address);
+		address += tIncrement;
 		break;
 	}
 
