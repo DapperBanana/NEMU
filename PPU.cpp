@@ -63,6 +63,7 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 		break;
 	case 0x0004: // OAM Data
 		oamMemory[oamAddress] = data;
+		oamAddress++;
 		break;
 	case 0x0005: // Scroll
 		break;
