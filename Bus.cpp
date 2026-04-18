@@ -40,28 +40,3 @@ uint8_t Bus::read(uint16_t addr, bool bReadOnly) {
 
 	return data;
 }
-
-void Bus::insertCartridge(const std::shared_ptr<Cartridge>& cartridge) {
-	cart = cartridge;
-	ppu.connectCartridge(cartridge);
-}
-
-void Bus::reset() {
-	cpu.reset();
-	nSystemClockCounter = 0;
-}
-
-void Bus::clock() {
-	ppu.clock();
-
-	if (nSystemClockCounter % 3 == 0) {
-		cpu.clock();
-	}
-
-	if (ppu.nmi) {
-		ppu.nmi = false;
-		cpu.nmi();
-	}
-
-	nSystemClockCounter++;
-}
