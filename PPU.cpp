@@ -33,7 +33,7 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 	case 0x0003: // OAM Address
 		break;
 	case 0x0004: // OAM Data
-		data = oamData;
+		data = oamMemory[oamAddress];
 		break;
 	case 0x0005: // Scroll
 		break;
@@ -41,6 +41,13 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		break;
 	case 0x0007: // PPU Data
 		data = dataBuffer;
+		dataBuffer = ppuRead(ppuAddress);
+
+		if (ppuAddress >= 0x3F00) data = dataBuffer; // Palette fix
+
+		if (ppuAddress >= 0x3FFF) ppuAddress = 0x0000;
+		else ppuAddress++;
+
 		break;
 	}
 
@@ -58,21 +65,79 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 	case 0x0002: // Status
 		break;
 	case 0x0003: // OAM Address
-		oamAddr = data;
+		oamAddress = data;
 		break;
 	case 0x0004: // OAM Data
-		oamData = data;
+		oamMemory[oamAddress] = data;
+		oamAddress++;
 		break;
 	case 0x0005: // Scroll
 		break;
 	case 0x0006: // PPU Address
 		break;
 	case 0x0007: // PPU Data
-		dataBuffer = data;
+		ppuWrite(ppuAddress, data);
+
+		if (ppuAddress >= 0x3FFF) ppuAddress = 0x0000;
+		else ppuAddress++;
+
 		break;
 	}
 }
 
-void PPU::clock() {
+uint8_t PPU::ppuRead(uint16_t addr) {
+	uint8_t data = 0x00;
+	addr &= 0x3FFF; // Mirroring
 
+	if (addr >= 0x0000 && addr <= 0x1FFF) {
+		data = patternTable[(addr & 0x1000) >> 12][addr & 0x0FFF];
+	}
+	else if (addr >= 0x2000 && addr <= 0x3EFF) {
+		addr &= 0x0FFF; // Mirroring
+		if (addr >= 0x0000 && addr <= 0x03FF) {
+			data = nameTable[0][addr & 0x03FF];
+		}
+		else if (addr >= 0x0400 && addr <= 0x07FF) {
+			data = nameTable[1][addr & 0x03FF];
+		}
+		else if (addr >= 0x0800 && addr <= 0x0BFF) {
+			data = nameTable[2][addr & 0x03FF];
+		}
+		else if (addr >= 0x0C00 && addr <= 0x0FFF) {
+			data = nameTable[3][addr & 0x03FF];
+		}
+	}
+	else if (addr >= 0x3F00 && addr <= 0x3F1F) {
+		addr &= 0x001F; // Mirroring
+		data = paletteTable[addr];
+	}
+
+	return data;
+}
+
+void PPU::ppuWrite(uint16_t addr, uint8_t data) {
+	addr &= 0x3FFF; // Mirroring
+
+	if (addr >= 0x0000 && addr <= 0x1FFF) {
+		patternTable[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+	}
+	else if (addr >= 0x2000 && addr <= 0x3EFF) {
+		addr &= 0x0FFF; // Mirroring
+		if (addr >= 0x0000 && addr <= 0x03FF) {
+			nameTable[0][addr & 0x03FF] = data;
+		}
+		else if (addr >= 0x0400 && addr <= 0x07FF) {
+			nameTable[1][addr & 0x03FF] = data;
+		}
+		else if (addr >= 0x0800 && addr <= 0x0BFF) {
+			nameTable[2][addr & 0x03FF] = data;
+		}
+		else if (addr >= 0x0C00 && addr <= 0x0FFF) {
+			nameTable[3][addr & 0x03FF] = data;
+		}
+	}
+	else if (addr >= 0x3F00 && addr <= 0x3F1F) {
+		addr &= 0x001F; // Mirroring
+		paletteTable[addr] = data;
+	}
 }

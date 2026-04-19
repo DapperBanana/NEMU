@@ -11,6 +11,9 @@
 - [x] NMI generation on vblank
 - [x] Cartridge loading (iNES format, mapper 000)
 - [x] Cartridge wired into Bus for CPU ($8000-$FFFF) and PPU ($0000-$1FFF)
+- [x] PPU Control Register ($2000) Write
+- [x] PPU Mask Register ($2001) Write
+- [x] PPU Scroll Register ($2005) Write
 
 ## In Progress
 - [ ] PPU rendering pipeline (background tile fetch per scanline)
@@ -18,6 +21,4 @@
 
 ## Up Next
 - [ ] Additional mappers (001, 002, 003)
-- [ ] PPU sprite evaluation and rendering (OAM)
-- [ ] PPU scrolling (fine X/Y, loopy register model)
-- [ ] Game input (controller polling at $4016/$4017)
+- [ ] PPU sprite evaluation
