@@ -72,6 +72,14 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 		oamAddress++;
 		break;
 	case 0x0005: // Scroll
+		if (!bAddressLatch) {
+			xScroll = data;
+			bAddressLatch = true;
+		}
+		else {
+			yScroll = data;
+			bAddressLatch = false;
+		}
 		break;
 	case 0x0006: // PPU Address
 		break;
