@@ -72,6 +72,7 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 		addressLatch ^= 1;
 		break;
 	case 0x0007: // PPU Data
+		dataBuffer = data;
 		break;
 	}
 }
