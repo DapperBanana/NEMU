@@ -71,6 +71,9 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 	case 0x0006: // PPU Address
 		ppuAddr[addressLatch] = data;
 		addressLatch ^= 1;
+		if (addressLatch == 0) {
+			ppuAddress = (ppuAddr[0] << 8) | ppuAddr[1];
+		}
 		break;
 	case 0x0007: // PPU Data
 		dataBuffer = data;
