@@ -11,12 +11,11 @@
 - [x] NMI generation on vblank
 - [x] Cartridge loading (iNES format, mapper 000)
 - [x] Cartridge wired into Bus for CPU ($8000-$FFFF) and PPU ($0000-$1FFF)
+- [x] PPU Control Register ($2000) Write
+- [x] PPU Mask Register ($2001) Write
+- [x] PPU Scroll Register ($2005) Write
+- [x] PPU Data Register ($2007) Read/Write
 
 ## In Progress
 - [ ] PPU rendering pipeline (background tile fetch per scanline)
-- [ ] Nametable mirroring modes (horizontal/vertical from cartridge header)
-- [ ] PPU memory map and basic read/write
-
-## Up Next
-- [ ] Additional mappers (001, 002, 003)
-- [ ] PPU sprite evaluation
+- [ ] Nametable mirroring modes (hor
