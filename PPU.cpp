@@ -33,7 +33,6 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 	case 0x0003: // OAM Address
 		break;
 	case 0x0004: // OAM Data
-		data = oamMemory[oamAddress];
 		break;
 	case 0x0005: // Scroll
 		break;
@@ -58,17 +57,17 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 	case 0x0002: // Status
 		break;
 	case 0x0003: // OAM Address
-		oamAddress = data;
+		oamAddr = data;
 		break;
 	case 0x0004: // OAM Data
-		oamMemory[oamAddress] = data;
+		oamMemory[oamAddr] = data;
 		break;
 	case 0x0005: // Scroll
-		scroll[addressLatch] = data;
-		addressLatch ^= 1;
+		scroll[scrollLatch] = data;
+		scrollLatch ^= 1;
 		break;
 	case 0x0006: // PPU Address
-		ppuAddressLatch[addressLatch] = data;
+		ppuAddr[addressLatch] = data;
 		addressLatch ^= 1;
 		break;
 	case 0x0007: // PPU Data
