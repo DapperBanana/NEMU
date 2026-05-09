@@ -40,6 +40,8 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		break;
 	case 0x0007: // PPU Data
 		data = dataBuffer;
+		// Increment address after read
+		ppuAddress += (control & 0x04) ? 32 : 1;
 		break;
 	}
 
