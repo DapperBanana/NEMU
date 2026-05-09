@@ -87,3 +87,13 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 void PPU::clock() {
 
 }
+
+void PPU::ppuWrite(uint16_t addr, uint8_t data) {
+	if (addr >= 0x0000 && addr <= 0x1FFF) {
+		patternTable[(addr & 0x1000) >> 12][addr & 0x0FFF] = data;
+	} else if (addr >= 0x2000 && addr <= 0x3EFF) {
+		nameTable[(addr & 0x0C00) >> 10][addr & 0x03FF] = data;
+	} else if (addr >= 0x3F00 && addr <= 0x3F1F) {
+		paletteTable[addr & 0x001F] = data;
+	}
+}
