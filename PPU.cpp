@@ -77,6 +77,9 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 		break;
 	case 0x0007: // PPU Data
 		dataBuffer = data;
+		ppuWrite(ppuAddress, data);
+		// Increment address after write
+		ppuAddress += (control & 0x04) ? 32 : 1;
 		break;
 	}
 }
