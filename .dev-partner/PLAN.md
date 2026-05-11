@@ -14,11 +14,8 @@
 - [x] PPU Control Register ($2000) Write
 - [x] PPU Mask Register ($2001) Write
 - [x] PPU Scroll Register ($2005) Write
+- [x] PPU OAM DMA Transfer ($4014)
 
 ## In Progress
 - [ ] PPU rendering pipeline (background tile fetch per scanline)
-- [ ] Nametable mirroring modes (horizontal/vertical from cartridge header)
-
-## Up Next
-- [ ] Additional mappers (001, 002, 003)
-- [ ] PPU sprite evaluation
+- [ ] Nametable mirroring modes (hor
