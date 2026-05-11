@@ -34,6 +34,7 @@ uint8_t PPU::cpuRead(uint16_t addr, bool bReadOnly) {
 		// OAMADDR register (W)
 		break;
 	case 0x0004: // OAM Data
+		data = oamMemory[oamAddr];
 		break;
 	case 0x0005: // Scroll
 		break;
@@ -60,6 +61,8 @@ void PPU::cpuWrite(uint16_t addr, uint8_t data) {
 		oamAddr = data;
 		break;
 	case 0x0004: // OAM Data
+		oamMemory[oamAddr] = data;
+		oamAddr++; // Auto increment after write
 		break;
 	case 0x0005: // Scroll
 		break;
