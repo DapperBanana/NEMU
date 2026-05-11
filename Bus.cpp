@@ -24,7 +24,7 @@ void Bus::write(uint16_t addr, uint8_t data) {
 	else if (addr >= 0x2000 && addr <= 0x3FFF) {
 		ppu.cpuWrite(addr & 0x0007, data);
 	}
-	else if (addr >= 0x4014 && addr <= 0x4014) {
+	else if (addr == 0x4014) {
 		// DMA transfer
 		uint16_t dma_address = data << 8;
 		for (int i = 0; i < 256; i++) {
