@@ -1,4 +1,5 @@
 #include "Bus.h"
+#include <cstring>
 
 
 Bus::Bus() {
