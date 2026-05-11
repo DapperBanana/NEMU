@@ -1,4 +1,5 @@
 #include "PPU.h"
+#include <cstring>
 
 
 PPU::PPU() {
@@ -10,7 +11,7 @@ PPU::PPU() {
 	
 	for (auto& b : paletteTable) b = 0x00;
 
-	for (auto& b : oamMemory) b = 0x00;
+	memset(oamMemory, 0x00, 256);
 }
 
 PPU::~PPU() {
